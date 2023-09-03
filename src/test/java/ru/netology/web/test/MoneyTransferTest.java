@@ -10,6 +10,7 @@ import ru.netology.web.page.LoginPageV1;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import static org.junit.jupiter.api.Assertions.*;
 import static ru.netology.web.data.DataHelper.*;
 
 public class MoneyTransferTest {
@@ -36,22 +37,22 @@ public class MoneyTransferTest {
         dashboardPage = transferPage.makeValidTransfer(String.valueOf(amount), firstCardInfo);
         var actualBalanceFirstCard = dashboardPage.getCardBalance(firstCardInfo);
         var actualBalanceSecondCard = dashboardPage.getCardBalance(secondCardInfo);
-        Assertions.assertEquals(expectedBalanceFirstCard, actualBalanceFirstCard);
-        Assertions.assertEquals(expectedBalanceSecondCard, actualBalanceSecondCard);
+        assertEquals(expectedBalanceFirstCard, actualBalanceFirstCard);
+        assertEquals(expectedBalanceSecondCard, actualBalanceSecondCard);
     }
     @Test
-    void shouldGetErrorMessageIfAmoutMoreBalance() {
+    void shouldGetErrorMessageIfAmountMoreBalance() {
         var firstCardInfo = getFirstCardInfo();
         var secondCardInfo = getSecondCardInfo();
-        var firstCardBalance = dashboardPage.getCardBalance(firstCardInfo);
-        var secondCardBalance = dashboardPage.getCardBalance(secondCardInfo);
+        var firstCardBalance = DashboardPage.getCardBalance(firstCardInfo);
+        var secondCardBalance = DashboardPage.getCardBalance(secondCardInfo);
         var amount = generateInvalidAmount(secondCardBalance);
-        var transferPage = dashboardPage.selectCardToTransfer(firstCardInfo);
+        var transferPage = DashboardPage.selectCardToTransfer(firstCardInfo);
         transferPage.makeTransfer(String.valueOf(amount), secondCardInfo);
         transferPage.findErrorMessage("Выполнена попытка перевода суммы, превышающей остаток на карте списания");
-        var actualBalanceFirstCard = dashboardPage.getCardBalance(firstCardInfo);
-        var actualBalanceSecondCard = dashboardPage.getCardBalance(secondCardInfo);
-        Assertions.assertEquals(firstCardBalance, actualBalanceFirstCard);
-        Assertions.assertEquals(secondCardBalance, actualBalanceSecondCard);
+        var actualBalanceFirstCard = DashboardPage.getCardBalance(firstCardInfo);
+        var actualBalanceSecondCard = DashboardPage.getCardBalance(secondCardInfo);
+        assertEquals(firstCardBalance, actualBalanceFirstCard);
+        assertEquals(secondCardBalance, actualBalanceSecondCard);
     }
 }
